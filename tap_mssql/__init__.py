@@ -16,7 +16,7 @@ import tap_mssql.sync_strategies.common as common
 import tap_mssql.sync_strategies.full_table as full_table
 import tap_mssql.sync_strategies.incremental as incremental
 import tap_mssql.sync_strategies.log_based as log_based
-from tap_mssql.connection import MSSQLConnection, connect_with_backoff, ResultIterator
+from tap_mssql.connection import MSSQLConnection, connect_with_backoff, ResultIterator, FilterSpecs
 
 ARRAYSIZE = 1
 
@@ -797,6 +797,7 @@ def main_impl():
     global ARRAYSIZE
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
     mssql_conn = MSSQLConnection(args.config)
+    filter_specs = FilterSpecs(args.config)
     log_server_params(mssql_conn)
 
     ARRAYSIZE = args.config.get('cursor_array_size',1)
