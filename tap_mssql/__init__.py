@@ -179,6 +179,8 @@ def schema_for_column(c, config):
 def create_column_metadata(cols, config):
     mdata = {}
     mdata = metadata.write(mdata, (), "selected-by-default", False)
+    mdata = metadata.write(mdata, (), "selected", True)
+    mdata = metadata.write(mdata, (), "replication-method",config.get("metadata", {}).get("replication-method", "FULL_TABLE"))
     for c in cols:
         schema = schema_for_column(c, config)
         mdata = metadata.write(
