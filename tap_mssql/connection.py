@@ -53,6 +53,15 @@ class MSSQLConnection(pymssql.Connection):
         self.close()
 
 
+class FilterSpecs:
+    def __init__(self,config):
+        self.filter = config.get("filter_spec")
+        LOGGER.info(f"filter is {self.filter}")
+
+    def get_filter_condition(self):
+        """Return the filter condition if present"""
+        return self.filter
+
 def make_connection_wrapper(config):
     class ConnectionWrapper(MSSQLConnection):
         def __init__(self, *args, **kwargs):
