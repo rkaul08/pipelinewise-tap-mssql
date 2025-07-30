@@ -4,7 +4,7 @@
 import singer
 
 import tap_mssql.sync_strategies.common as common
-from tap_mssql.connection import MSSQLConnection, connect_with_backoff
+from tap_mssql.connection import MSSQLConnection, connect_with_backoff, FilterSpecs
 
 LOGGER = singer.get_logger()
 
@@ -49,7 +49,9 @@ def sync_table(mssql_conn, config, catalog_entry, state, columns, stream_version
 
     with connect_with_backoff(mssql_conn) as open_conn:
         with open_conn.cursor() as cur:
-            select_sql = common.generate_select_sql(catalog_entry, columns)
+            filter_spec = FilterSpecs(config)
+            select_sql = common.generate_select_sql(catalog_entry, columns, filter_spec.get_filter_condition())
+            
 
             params = {}
 
